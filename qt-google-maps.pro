@@ -10,10 +10,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webkitwidgets
 TARGET = qtmaps
 TEMPLATE = app
 
-INCLUDEPATH += ../qjson/include
+INCLUDEPATH += /usr/local/include
 
 linux* {
-LIBS += ../qjson/build/lib/libqjson.so
+LIBS += /usr/local/lib/libqjson-qt5.so
 }
 
 win32-g++ {
@@ -49,5 +49,4 @@ OTHER_FILES += \
 
 RESOURCES += \
     resource.qrc
-
 
