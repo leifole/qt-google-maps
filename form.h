@@ -52,6 +52,7 @@ private slots:
     void on_lwMarkers_currentRowChanged(int currentRow);
 
     void on_pbRemoveMarker_clicked();
+    void on_pbTrajectory_clicked();
 
     void on_zoomSpinBox_valueChanged(int arg1);
 
