@@ -1,6 +1,6 @@
 #include "geocode_data_manager.h"
 
-#include <QJson/Parser>
+#include <qjson-qt5/parser.h>
 #include <QDebug>
 
 

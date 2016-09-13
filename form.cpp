@@ -4,6 +4,8 @@
 #include <QWebFrame>
 #include <QWebElement>
 #include <QMessageBox>
+#include <qjson-qt5/parser.h>
+
 
 
 Form::Form(QWidget *parent) :
@@ -12,6 +14,7 @@ Form::Form(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->goButton, SIGNAL(clicked()), this, SLOT(goClicked()));
+    //connect(ui->pbTrajectory, SIGNAL(clicked()), this, SLOT(pbTrajectoryClicked()));
     connect(ui->lePostalAddress, SIGNAL(returnPressed()), this, SLOT(goClicked()));
 
     connect(&m_geocodeDataManager, SIGNAL(coordinatesReady(double,double)), this, SLOT(showCoordinates(double,double)));
@@ -58,6 +61,7 @@ void Form::setMarker(double east, double north, QString caption)
             QString("var marker = new google.maps.Marker({") +
             QString("position: new google.maps.LatLng(%1, %2),").arg(north).arg(east) +
             QString("map: map,") +
+  //          QString("draggable: true,") +
             QString("title: %1").arg("\""+caption+"\"") +
             QString("});") +
             QString("markers.push(marker);");
@@ -77,8 +81,6 @@ void Form::goClicked()
     QString address = ui->lePostalAddress->text();
     m_geocodeDataManager.getCoordinates(address.replace(" ", "+"));
 }
-
-
 
 void Form::errorOccured(const QString& error)
 {
@@ -115,10 +117,49 @@ void Form::on_pbRemoveMarker_clicked()
 
 }
 
+void Form::on_pbTrajectory_clicked()
+{
+    qDebug() << "pbTrajectory clicked";
+   // QVariant path = ui->webView->page()->currentFrame()->documentElement().evaluateJavaScript("trajectory.getPath()");
+
+   // qDebug() << path;
+
+   // QJson::Parser parser;
+
+   // bool ok;
+
+ //   // json is a QString containing the data to convert
+ //   QVariant result = parser.parse (result.toLatin1(), &ok);
+ //   if(!ok)
+ //   {
+ //       qDebug() << QString("Cannot convert to QJson object: %1").arg(result);
+ //       return;
+ //   }
+ //   qDebug() << "Success";
+
+    //QString code = result.toMap()["status"].toString();
+    //qDebug() << "Code" << code;
+    //if(code != "OK")
+    //{
+    //    emit errorOccured(QString("Code of request is: %1").arg(code));
+    //    return;
+    //}
+
+    //QVariantList results = result.toMap()["results"].toList();
+    //if(results.count() == 0)
+    //{
+    //    emit errorOccured(QString("Cannot find any locations"));
+    //    return;
+    //}
+
+    //double east  = results[0].toMap()["geometry"].toMap()["location"].toMap()["lng"].toDouble();
+    //double north = results[0].toMap()["geometry"].toMap()["location"].toMap()["lat"].toDouble();
+}
+
 void Form::on_zoomSpinBox_valueChanged(int arg1)
 {
-//    QString str =
-//            QString("map.setZoom(%1);").arg(arg1);
-//    qDebug() << str;
-//    ui->webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
+    QString str =
+            QString("map.setZoom(%1);").arg(arg1);
+    qDebug() << str;
+    ui->webView->page()->currentFrame()->documentElement().evaluateJavaScript(str);
 }
