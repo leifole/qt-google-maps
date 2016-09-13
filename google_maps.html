@@ -8,22 +8,82 @@
       #map_canvas { height: 100% }
     </style>
     <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&sensor=false">
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAXUSILQQHTk7egq57QZJC4eMx_8wIMolA&sensor=false">
     </script>
     <script type="text/javascript">
       var map;
+      var trajectory;
       var markers = [];
+      var id_counter = 0;
+      const MAX_MARKERS = 30;
 
       function initialize() {
         var myOptions = {
-          center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 8,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: new google.maps.LatLng(53.112248, 8.858132),
+          zoom: 19,
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
           panControl: true
         };
+
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+        trajectory = new google.maps.Polyline({
+                strokeColor: '#0000FF',
+                strokeOpacity: 0.5,
+                strokeWeight: 5,
+                geodesic: true
+        });
+        trajectory.setMap(map);
+
+        map.addListener('click', addLatLng);
+
+        function addLatLng(e){
+                if (id_counter >= MAX_MARKERS) {
+                        window.alert("Maximum number of waypoints reached");
+                }
+                else {
+                        var path = trajectory.getPath();
+                        path.push(e.latLng);
+
+                        var marker = new google.maps.Marker({
+                                position : e.latLng,
+                                draggable: true,
+                                title: 'WP #' + id_counter,
+                                label: id_counter.toString(),
+                                map: map
+                        });
+                        marker.addListener('dragend',updateTrajectory);
+                        marker.addListener('rightclick',removeMarker);
+                        marker.set("id",id_counter++);
+                        markers.push(marker);
+               }
+
+        }
+
+        function updateTrajectory(e){
+                var path = trajectory.getPath();
+                path.setAt(this.id,e.latLng);
+        }
+
+        function removeMarker(e){
+                this.setMap(null); // remove marker
+                trajectory.getPath().removeAt(this.id);
+                markers.splice(this.id,1);
+                id_counter--;
+
+                // set id to index in array
+                for(var i = 0; i < markers.length; i++){
+                        markers[i].id = i;
+                        markers[i].title = "WP #" + i;
+                        markers[i].label = i.toString();
+                        markers[i].setMap(map);
+                }
+
+         }
+
+
       }
-    </script>
+        </script>
   </head>
   <body onload="initialize()">
     <div id="map_canvas" style="width:100%; height:100%"></div>
