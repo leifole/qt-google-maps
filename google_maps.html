@@ -17,7 +17,6 @@
       var id_counter = 0;
       const MAX_MARKERS = 30;
 
-
       function initialize() {
 
 
@@ -26,6 +25,7 @@
           zoom: 19,
           mapTypeId: google.maps.MapTypeId.SATELLITE,
           panControl: true
+          //disableDefaultUI: true
         };
 
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -95,8 +95,17 @@
 
 
       function sendTrajectory(){
-          console.log("sending trajectory");
+
+          var path = trajectory.getPath();
+          for(var i = 0; i < path.getLength(); i++){
+              var _lat = path.getAt(i).lat();
+              var _lng = path.getAt(i).lng();
+              console.log("WP" + i + ": " + _lat + " " + _lng);
+          }
+
       }
+
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(el);
 
 
       }
