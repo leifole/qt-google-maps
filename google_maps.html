@@ -17,7 +17,10 @@
       var id_counter = 0;
       const MAX_MARKERS = 30;
 
+
       function initialize() {
+
+
         var myOptions = {
           center: new google.maps.LatLng(53.112248, 8.858132),
           zoom: 19,
@@ -81,12 +84,29 @@
 
          }
 
+      var el = document.getElementById("trajectory_btn");
+      if(el){
+          console.log("getElementById trajectory_btn success");
+          el.addEventListener("click", sendTrajectory);
+      }
+      else {
+          console.log("getElementById trajectory_btn error");
+      }
+
+
+      function sendTrajectory(){
+          console.log("sending trajectory");
+      }
+
 
       }
         </script>
   </head>
   <body onload="initialize()">
     <div id="map_canvas" style="width:100%; height:100%"></div>
+    <div>
+        <button id="trajectory_btn">Send Trajectory</button>
+    </div>
   </body>
 </html>
 
