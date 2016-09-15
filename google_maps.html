@@ -10,13 +10,17 @@
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAXUSILQQHTk7egq57QZJC4eMx_8wIMolA&sensor=false">
     </script>
+    
+    <script src="/assets/js/taskapi.js"></script>
+    
     <script type="text/javascript">
       var map;
       var trajectory;
       var markers = [];
       var id_counter = 0;
       const MAX_MARKERS = 30;
-
+      
+      
       function initialize() {
 
 
@@ -94,11 +98,25 @@
       function sendTrajectory(){
 
           var path = trajectory.getPath();
+          var list = [];
           for(var i = 0; i < path.getLength(); i++){
               var _lat = path.getAt(i).lat();
               var _lng = path.getAt(i).lng();
               console.log("WP" + i + ": " + _lat + " " + _lng);
+              
+
+              var wp = {data: [ _lat, _lng, 0 ]}
+              list.push(wp);
+                            
+              
+              
+
+              
           }
+          console.log(list);
+          JSON.postObject("http://localhost:9292/api/tasks/tasks/localhost/g2c/ports/geodesic_waypoints/write",list,function(result){
+              console.log(result);
+          });
 
       }
 
